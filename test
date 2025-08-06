@@ -1,0 +1,17 @@
+`timescale 1ns/1ps
+module tb_stopwatch;
+    reg clk, reset, start;
+    wire [3:0] seconds;
+
+    stopwatch uut(clk, reset, start, seconds);
+    always #1 clk = ~clk;  // faster clock for sim
+
+    initial begin
+        $dumpfile("stopwatch.vcd"); $dumpvars(0, tb_stopwatch);
+        clk = 0; reset = 1; start = 0; #5;
+        reset = 0; start = 1;
+
+        #1000;  // simulate enough time to see seconds increment
+        $finish;
+    end
+endmodule
